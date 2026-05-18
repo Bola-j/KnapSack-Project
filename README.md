@@ -59,7 +59,7 @@ graph TD
 - **Microsecond-Precise Benchmarking**: Employs `time.perf_counter()` to obtain exact, system-independent runtimes.
 - **Safety Thresholding**: Automatically bypasses Brute Force for inputs $N > 22$ to safeguard the execution thread.
 - **Clean API Design**: `main.py` provides clean functions (`solve_knapsack_api`) returning raw, standard JSON-like dicts, abstracting all computation away from UI files.
-- **Premium Tkinter Interface**: Form-based responsive layout with clean status banners and organized multi-column output displays.
+- **Premium Tkinter Interface**: Form-based responsive layout with clean status banners and organized multi-column output displays. Includes a **Live Performance Analytics Dashboard** at the bottom of the results window, calculating exact speed ratios between algorithms (e.g., "Greedy is 5.4x faster than Dynamic Programming") in real-time.
 
 ---
 
@@ -96,11 +96,12 @@ KnapSack-Project/
 - **Python 3.8 or higher**
 - No external packages are required! The solver suite uses Python's standard library to guarantee cross-machine compatibility.
 
-### Launching the Graphical Solver
-To run the Tkinter desktop solver application, execute the main entry point:
+### Launching the App (GUI & Web Backend)
+To run the Tkinter desktop solver and boot the React Web API backend concurrently, execute the main entry point:
 ```bash
 python main.py
 ```
+*Note: This launches the desktop solver on your screen and starts a background daemon thread serving the React frontend on http://localhost:8000. When you close the GUI window, the backend server will automatically shut down.*
 
 ### Programmatic API Usage
 You can integrate the core solving logic into other scripts (or a web server) with simple, standard API calls:
@@ -131,6 +132,33 @@ results = run_scaling_benchmark()
 for res in results:
     print(f"N={res['n']} | DP: {res['dp_avg_ms']:.4f}ms | Greedy: {res['greedy_avg_ms']:.4f}ms")
 ```
+
+---
+
+## ⚛️ Modern React Frontend Dashboard
+
+In addition to the native Tkinter GUI, this repository features a premium **Vite React Web Frontend** located in the `frontend/` directory.
+
+Styled with **Tailwind CSS**, it features a modern side-by-side dashboard layout:
+- **Left Column**: Form for entering weights/values and capacity, with row insertions/deletions and a one-click **"Demo Data" Sparkle Button**.
+- **Right Column**: Displays glows for individual solver runtimes, renders selected item index chips, and calculates relative speed ratios on the fly.
+- **Modular Hook-Driven Code**: Separates API states and timing fetches cleanly into custom hooks (`useKnapsack.js`).
+
+### How to Run:
+1. **Boot the Backend API Server**:
+   Simply launch the main entry point:
+   ```bash
+   python main.py
+   ```
+   *(This launches the Tkinter desktop GUI and starts the Web API server on port 8000 concurrently in a background daemon thread).*
+
+2. **Boot the React Web Interface**:
+   In another terminal, navigate to the frontend folder and spin up Vite:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+   *(Hosts the dashboard at http://localhost:5173).*
 
 ---
 
